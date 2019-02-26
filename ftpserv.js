@@ -1,39 +1,121 @@
-var net = require('net');
-var fs = require('fs');
-var port = process.argv[2];
+'use strict';
 
-var server = net.createServer();
+const
+  net = require('net'),
+  fs = require('fs'),
+  port = process.argv[2],
+  spawn = require('child_process').spawn,
 
-server.on('listening', function () {
-  console.log(`Server is running on port ${port}`);
-})
+  server = net.createServer(function (socket) {
 
-server.on('connection', function (socket) {
-  console.log('Server has a new connection');
+  //reporting
+  console.log('Client connected');
+  console.log(`localAddress: ${socket.localAddress}`);
+  console.log(`RemoteAddress: ${socket.remoteAddress}`);
 
   socket.setEncoding('utf8');
+  socket.write('Commands Available:\npwd\n'+'cd\n'+'ls\n'+'mkdir\n'+'rmdir\n'+'get\n'+'put\n'+'@quit\n\n');
 
-  socket.write('command pwd')
+  let ftpServer = function (arg) {
 
-  socket.on('data', function (data) {
+    let
+      command = arg.trim().toLowerCase(),
+      dirname = '',
+      file = '';
 
-    console.log('got:', data.toString());
+    if (command.includes('cd')) {
+      dirname = command.slice(3);
+      command = 'cd';
 
-    var command = data.trim().toLowerCase();
+    }else if (command.includes('mkdir')) {
+      dirname = command.slice(6);
+      command = 'mkdir';
+    }else if (command.includes('rmdir')) {
+      dirname = command.slice(6);
+      command = 'rmdir';
+    }else if (command.includes('get')) {
+      file = command.slice(4);
+      command = 'get';
+    }else if (command.includes('put')) {
+      file = command.slice(4);
+      command = 'put';
+    }
 
     switch (command) {
       case 'pwd':
-        socket.write(process.cwd());
-        break;
+        socket.write(process.cwd() + '\n');
+        return ;
+      case 'cd':
+        process.chdir(dirname);
+        return ;
+      case 'ls':
+      const
+        ls = spawn('ls', [`${process.cwd()}`]);
+
+        ls.stdout.on('data', function (data) {
+          socket.write(data.toString());
+        })
+
+        ls.stderr.on('data', function (data) {
+          socket.write(data.toString());
+        });
+        return ;
+      case 'mkdir':
+        fs.mkdir(dirname, function (err) {
+          if (err) {
+            socket.write(`${err.message}\n`);
+          }else {
+            socket.write(`directory ${dirname} was created.\n`);
+          }
+        });
+        return ;
+      case 'rmdir':
+        fs.rmdir(dirname, function (err) {
+          if (err) {
+            socket.write(`${err.message}\n`);
+          }else {
+            socket.write(`directory ${dirname} was deleted.\n`);
+          }
+        });
+        return ;
+      case 'get':
+      fs.copyFile(`${process.cwd()}/${file}`, `${process.env.OLDPWD}/ftp_client/local/${file}`, (err)=>{
+        if (err) {
+          socket.write(`${err.message}\n`);
+        }else {
+          socket.write(`file ${file} was copied succesfully\n`);
+        }
+
+      });
+       return ;
+       case 'put':
+       fs.copyFile(`${process.env.OLDPWD}/ftp_client/local/${file}`,`${process.cwd()}/remote/${file}`, (err)=>{
+         if (err) {
+           socket.write(`${err.message}\n`);
+         }else {
+           socket.write(`file ${file} was copied succesfully\n`);
+         }
+       });
+        return ;
       case '@quit':
-        socket.write('Bye, bye!!')
+        socket.write('disconnected from server\n');
         return socket.end();
-        break;
     }
+  }
+
+  socket.on('data', function (data) {
+    ftpServer(data)
   })
+
   socket.on('end', function () {
     console.log('client connection ended.');
-  })
+  });
+
+});
+
+server.on('listening', function () {
+  console.log(`Server is running on port ${port}`);
+
 })
 
 server.on('error', function (error) {
