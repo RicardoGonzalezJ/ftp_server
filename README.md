@@ -1,6 +1,6 @@
-# Simple FTP server and client
+# Simple FTP server
 
-The aim of this project is for learning the basic of an FTP server and client using node js built-in modules using a TCP server. 
+The aim of this project is for learning the basic of an FTP server using node js built-in modules. 
 
 I decided to work on this project because I was curious about how a FTP server works. The server has 8 basic commands that emulate some of functionalities of a FTP server. For now, I only be able to transfer files between two different directories but in the same machine. In the other hand, the server accept connection from local machines and remote machines under the same local network and the commands works fine.  
 
