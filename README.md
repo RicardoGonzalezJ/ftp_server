@@ -20,8 +20,11 @@ Modules used on this project:
 1. test the server using **nc** or **telnet**
 
 # Commands:
-* cd  Changes the current directory in ftp server.
-* ls  Displays the content of current directory.
+* cd Changes the current directory of the ftp server.
+* ls Displays the content of current directory.
+* pwd Displays the work directory of the ftp server.
+* mkdir <dir_name> Creates a directory in the ftp server.
+* rmdir <dir_name> Deletes directory from the ftp server.
 * get <file_name> copy the file from local folder to remote folder.
 * put <file_name> copy the file from remote folder to local folder.
 
