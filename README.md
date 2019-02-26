@@ -19,4 +19,9 @@ Modules used on this project:
    `node ftpserv.js port`
 1. test the server using **nc** or **telnet**
 
-# Pending Task:
+# Commands:
+* cd  Changes the current directory in ftp server.
+* ls  Displays the content of current directory.
+* get <file_name> copy the file from local folder to remote folder.
+* put <file_name> copy the file from remote folder to local folder.
+
