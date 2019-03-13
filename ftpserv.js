@@ -14,29 +14,32 @@ const
   console.log(`RemoteAddress: ${socket.remoteAddress}`);
 
   socket.setEncoding('utf8');
+
+  // commands Available
   socket.write('Commands Available:\npwd\n'+'cd\n'+'ls\n'+'mkdir\n'+'rmdir\n'+'get\n'+'put\n'+'@quit\n\n');
 
   let ftpServer = function (arg) {
 
     let
       command = arg.trim().toLowerCase(),
-      cleanCommand = (command === 'pwd' || command === 'ls' || '@quit') ? command : command.substring(0,command.indexOf(" ")),
+      cleanCommand = (command === 'pwd' || command === 'ls' || command === '@quit') ? command : command.substring(0,command.indexOf(" ")),
       dirname = '',
       file = '';
 
+    // command handler
     if (cleanCommand === 'cd') {
       dirname = command.substring(command.indexOf(" ")+1);
 
-    }else if (command.includes('mkdir')) {
+    }else if (cleanCommand === 'mkdir') {
       dirname = command.substring(command.indexOf(" ")+1);
 
-    }else if (command.includes('rmdir')) {
+    }else if (cleanCommand === 'rmdir') {
       dirname = command.substring(command.indexOf(" ")+1);
 
-    }else if (command.includes('get')) {
+    }else if (cleanCommand === 'get') {
       file = command.substring(command.indexOf(" ")+1);
 
-    }else if (command.includes('put')) {
+    }else if (cleanCommand === 'put') {
       file = command.substring(command.indexOf(" ")+1);
 
     }
@@ -126,6 +129,7 @@ server.on('close', function () {
   console.log('Server is closed.');
 })
 
+// message in case port is missing
 if (port === undefined) {
   console.log(`Please include port number as 'node ftpserv.js port'`);
 }else {
