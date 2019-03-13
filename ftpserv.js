@@ -20,30 +20,8 @@ const
 
   let ftpServer = function (arg) {
 
-    // command handler
-    /*let
-      command = arg.trim().toLowerCase(),
-      cleanCommand = (command === 'pwd' || command === 'ls' || command === '@quit') ? command : command.substring(0,command.indexOf(" ")),
-      dirname = '',
-      file = '';
+    let commands = commandManager(arg);
 
-    if (cleanCommand === 'cd') {
-      dirname = command.substring(command.indexOf(" ")+1);
-
-    }else if (cleanCommand === 'mkdir') {
-      dirname = command.substring(command.indexOf(" ")+1);
-
-    }else if (cleanCommand === 'rmdir') {
-      dirname = command.substring(command.indexOf(" ")+1);
-
-    }else if (cleanCommand === 'get') {
-      file = command.substring(command.indexOf(" ")+1);
-
-    }else if (cleanCommand === 'put') {
-      file = command.substring(command.indexOf(" ")+1);
-
-    }*/
-    var commands = commandManager(arg);
     switch (commands[0]) {
       case 'pwd':
         socket.write(process.cwd() + '\n');
@@ -82,7 +60,7 @@ const
         });
         return ;
       case 'get':
-      fs.copyFile(`${process.cwd()}/${commands[1]}`, `${process.env.OLDPWD}/ftp_client/local/${file}`, (err)=>{
+      fs.copyFile(`${process.cwd()}/${commands[1]}`, `${process.env.OLDPWD}/ftp_client/local/${commands[1]}`, (err)=>{
         if (err) {
           socket.write(`${err.message}\n`);
         }else {
@@ -92,7 +70,7 @@ const
       });
        return ;
        case 'put':
-       fs.copyFile(`${process.env.OLDPWD}/ftp_client/local/${file}`,`${process.cwd()}/remote/${file}`, (err)=>{
+       fs.copyFile(`${process.env.OLDPWD}/ftp_client/local/${commands[1]}`,`${process.cwd()}/remote/${commands[1]}`, (err)=>{
          if (err) {
            socket.write(`${err.message}\n`);
          }else {
@@ -160,7 +138,7 @@ if (cleanCommand === 'cd') {
 
 }else if (cleanCommand === 'get' || cleanCommand === 'put') {
   filename = command.substring(command.indexOf(" ")+1);
-  parameters.push(commandCleaned);
+  parameters.push(cleanCommand);
   parameters.push(filename);
 
 }
