@@ -1,0 +1,24 @@
+{
+  "name": "ftp_server",
+  "version": "1.0.0",
+  "description": "Simple FTP server.",
+  "scripts": {
+    "start": "node ftpserv.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RicardoGonzalezJ/ftp_server.git"
+  },
+  "keywords": [
+    "ftp",
+    "server",
+    "TCP",
+  ],
+  "author": "Ricardo Gonzalez <rgonzalezj1480@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RicardoGonzalezJ/ftp_server/issues"
+  },
+  "homepage": "https://github.com/RicardoGonzalezJ/ftp_server#readme"
+}
