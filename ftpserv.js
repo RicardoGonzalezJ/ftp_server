@@ -20,28 +20,28 @@ const
 
     let
       command = arg.trim().toLowerCase(),
+      cleanCommand = (command === 'pwd' || command === 'ls' || '@quit') ? command : command.substring(0,command.indexOf(" ")),
       dirname = '',
       file = '';
 
-    if (command.includes('cd')) {
-      dirname = command.slice(3);
-      command = 'cd';
+    if (cleanCommand === 'cd') {
+      dirname = command.substring(command.indexOf(" ")+1);
 
     }else if (command.includes('mkdir')) {
-      dirname = command.slice(6);
-      command = 'mkdir';
+      dirname = command.substring(command.indexOf(" ")+1);
+
     }else if (command.includes('rmdir')) {
-      dirname = command.slice(6);
-      command = 'rmdir';
+      dirname = command.substring(command.indexOf(" ")+1);
+
     }else if (command.includes('get')) {
-      file = command.slice(4);
-      command = 'get';
+      file = command.substring(command.indexOf(" ")+1);
+
     }else if (command.includes('put')) {
-      file = command.slice(4);
-      command = 'put';
+      file = command.substring(command.indexOf(" ")+1);
+
     }
 
-    switch (command) {
+    switch (cleanCommand) {
       case 'pwd':
         socket.write(process.cwd() + '\n');
         return ;
