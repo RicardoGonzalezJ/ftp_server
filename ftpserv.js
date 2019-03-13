@@ -21,7 +21,7 @@ const
   let ftpServer = function (arg) {
 
     // command handler
-    let
+    /*let
       command = arg.trim().toLowerCase(),
       cleanCommand = (command === 'pwd' || command === 'ls' || command === '@quit') ? command : command.substring(0,command.indexOf(" ")),
       dirname = '',
@@ -42,14 +42,14 @@ const
     }else if (cleanCommand === 'put') {
       file = command.substring(command.indexOf(" ")+1);
 
-    }
-
-    switch (cleanCommand) {
+    }*/
+    var commands = commandManager(arg);
+    switch (commands[0]) {
       case 'pwd':
         socket.write(process.cwd() + '\n');
         return ;
       case 'cd':
-        process.chdir(dirname);
+        process.chdir(commands[1]);
         return ;
       case 'ls':
       const
@@ -64,29 +64,29 @@ const
         });
         return ;
       case 'mkdir':
-        fs.mkdir(dirname, function (err) {
+        fs.mkdir(commands[1], function (err) {
           if (err) {
             socket.write(`${err.message}\n`);
           }else {
-            socket.write(`directory ${dirname} was created.\n`);
+            socket.write(`directory ${commands[1]} was created.\n`);
           }
         });
         return ;
       case 'rmdir':
-        fs.rmdir(dirname, function (err) {
+        fs.rmdir(commands[1], function (err) {
           if (err) {
             socket.write(`${err.message}\n`);
           }else {
-            socket.write(`directory ${dirname} was deleted.\n`);
+            socket.write(`directory ${commands[1]} was deleted.\n`);
           }
         });
         return ;
       case 'get':
-      fs.copyFile(`${process.cwd()}/${file}`, `${process.env.OLDPWD}/ftp_client/local/${file}`, (err)=>{
+      fs.copyFile(`${process.cwd()}/${commands[1]}`, `${process.env.OLDPWD}/ftp_client/local/${file}`, (err)=>{
         if (err) {
           socket.write(`${err.message}\n`);
         }else {
-          socket.write(`file ${file} was copied succesfully\n`);
+          socket.write(`file ${commands[1]} was copied succesfully\n`);
         }
 
       });
@@ -96,13 +96,12 @@ const
          if (err) {
            socket.write(`${err.message}\n`);
          }else {
-           socket.write(`file ${file} was copied succesfully\n`);
+           socket.write(`file ${commands[1]} was copied succesfully\n`);
          }
        });
         return ;
       case '@quit':
-        socket.write('disconnected from server\n');
-        return socket.end();
+        return socket.end('Bye\n');
     }
   }
 
@@ -134,4 +133,36 @@ if (port === undefined) {
   console.log(`Please include port number as 'node ftpserv.js port'`);
 }else {
   server.listen(port);
+}
+
+function commandManager(cmnd) {
+
+let
+  command = cmnd.trim().toLowerCase(),
+  cleanCommand = (command === 'pwd' || command === 'ls' || command === '@quit') ? command : command.substring(0,command.indexOf(" ")),
+  dirname = '',
+  filename = '',
+  parameters = [];
+
+if (cleanCommand === 'pwd' || cleanCommand === 'ls' || command === '@quit') {
+  parameters.push(cleanCommand);
+  return parameters;
+}
+if (cleanCommand === 'cd') {
+  dirname = command.substring(command.indexOf(" ")+1);
+  parameters.push(cleanCommand);
+  parameters.push(dirname);
+
+}else if (cleanCommand === 'mkdir' || cleanCommand === 'rmdir') {
+  dirname = command.substring(command.indexOf(" ")+1);
+  parameters.push(cleanCommand);
+  parameters.push(dirname);
+
+}else if (cleanCommand === 'get' || cleanCommand === 'put') {
+  filename = command.substring(command.indexOf(" ")+1);
+  parameters.push(commandCleaned);
+  parameters.push(filename);
+
+}
+ return parameters;
 }
