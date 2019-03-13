@@ -20,13 +20,13 @@ const
 
   let ftpServer = function (arg) {
 
+    // command handler
     let
       command = arg.trim().toLowerCase(),
       cleanCommand = (command === 'pwd' || command === 'ls' || command === '@quit') ? command : command.substring(0,command.indexOf(" ")),
       dirname = '',
       file = '';
 
-    // command handler
     if (cleanCommand === 'cd') {
       dirname = command.substring(command.indexOf(" ")+1);
 
