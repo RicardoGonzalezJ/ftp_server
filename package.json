@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "The aim of this project is for learning the basic of an FTP server using node js built-in modules.",
   "scripts": {
-    "start": "node ftpserb.js",
+    "start": "node ftpserv.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
