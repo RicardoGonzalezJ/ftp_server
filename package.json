@@ -1,24 +1,23 @@
 {
   "name": "ftp_server",
   "version": "1.0.0",
-  "description": "Simple FTP server.",
+  "description": "The aim of this project is for learning the basic of an FTP server using node js built-in modules.",
   "scripts": {
-    "start": "node ftpserv.js",
+    "start": "node ftpserb.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RicardoGonzalezJ/ftp_server.git"
   },
-  "keywords": [
-    "ftp",
-    "server",
-    "TCP",
-  ],
-  "author": "Ricardo Gonzalez <rgonzalezj1480@gmail.com>",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/RicardoGonzalezJ/ftp_server/issues"
   },
-  "homepage": "https://github.com/RicardoGonzalezJ/ftp_server#readme"
+  "homepage": "https://github.com/RicardoGonzalezJ/ftp_server#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
 }
